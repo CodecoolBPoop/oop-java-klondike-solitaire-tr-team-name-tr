@@ -128,6 +128,8 @@ public class Game extends Pane {
                 return Rank.isNextRank(card, topCard);
             }
         }
+
+
         return false;
 
     }
