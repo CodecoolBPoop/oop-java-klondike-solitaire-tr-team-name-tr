@@ -136,7 +136,8 @@ public class Game extends Pane {
                 return Rank.isNextRank(card, topCard);
             }
         }
-
+        
+        //Move to tableaus
         if (destPile.getPileType() == Pile.PileType.TABLEAU) {
             if (destPile.isEmpty()) {
                 return card.getRank() == Rank.KING;
