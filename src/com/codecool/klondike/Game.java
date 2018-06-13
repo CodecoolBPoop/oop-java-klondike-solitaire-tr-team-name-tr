@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -219,10 +220,18 @@ public class Game extends Pane {
     }
 
     public void dealCards() {
+        Collections.shuffle(deck);
+        int cardNumber = 0;
+        for (int i = 0; i <tableauPiles.size(); i++) {
+            for (int j = 0; j <= i; j++) {
+                tableauPiles.get(i).addCard(deck.get(cardNumber++));
+            }
+        }
+        while (cardNumber < deck.size()) {
+            stockPile.addCard(deck.get(cardNumber++));
+        }
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
         deckIterator.forEachRemaining(card -> {
-            stockPile.addCard(card);
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
