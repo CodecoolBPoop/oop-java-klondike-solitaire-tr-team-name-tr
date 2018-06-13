@@ -54,6 +54,10 @@ public class Game extends Pane {
     };
 
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
+        if (draggedCards == null) {
+            draggedCards = FXCollections.observableArrayList();
+        }
+        draggedCards = FXCollections.observableArrayList();
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
         if (activePile.getPileType() == Pile.PileType.STOCK)
@@ -74,6 +78,9 @@ public class Game extends Pane {
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
+        if (draggedCards == null) {
+            draggedCards = FXCollections.observableArrayList();
+        }
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
