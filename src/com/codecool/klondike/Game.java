@@ -77,7 +77,12 @@ public class Game extends Pane {
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);
+
+        Pile pile = getValidIntersectingPile(card, foundationPiles);
+        if (pile == null) {
+            pile = getValidIntersectingPile(card, tableauPiles);
+        }
+
         //TODO
         if (pile != null) {
             handleValidMove(card, pile);
@@ -112,8 +117,23 @@ public class Game extends Pane {
 
     public boolean isMoveValid(Card card, Pile destPile) {
         //TODO
-        return true;
+        // Move to foundation
+        if (destPile.getPileType() == Pile.PileType.FOUNDATION) {
+            if (destPile.isEmpty()) {   // Empty pile and card is an ace
+                return card.getRank() == Rank.ACE;
+            }
+
+            Card topCard = destPile.getTopCard();
+            if (Card.isSameSuit(card, topCard)) {
+                return Rank.isNextRank(card, topCard);
+            }
+        }
+
+
+        return false;
+
     }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {

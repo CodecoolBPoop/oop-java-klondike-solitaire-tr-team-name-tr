@@ -78,12 +78,11 @@ public class Card extends ImageView {
     }
 
     public static boolean isOppositeColor(Card card1, Card card2) {
-        //TODO
-        return true;
+        return (card1.suit.getColor().equals(card2.suit.getColor()));
     }
 
     public static boolean isSameSuit(Card card1, Card card2) {
-        return card1.getSuit() == card2.getSuit();
+        return card1.getSuit().equals(card2.getSuit());
     }
 
     public static List<Card> createNewDeck() {
