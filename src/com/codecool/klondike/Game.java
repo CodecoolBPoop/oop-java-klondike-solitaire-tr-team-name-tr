@@ -44,6 +44,7 @@ public class Game extends Pane {
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
         }
+        makeTopCardVisible();
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -140,7 +141,7 @@ public class Game extends Pane {
                 return Rank.isNextRank(card, topCard);
             }
         }
-        
+
         //Move to tableaus
         if (destPile.getPileType() == Pile.PileType.TABLEAU) {
             if (destPile.isEmpty()) {
@@ -227,7 +228,7 @@ public class Game extends Pane {
     public void dealCards() {
         Collections.shuffle(deck);
         int cardNumber = 0;
-        for (int i = 0; i <tableauPiles.size(); i++) {
+        for (int i = 0; i < tableauPiles.size(); i++) {
             for (int j = 0; j <= i; j++) {
                 tableauPiles.get(i).addCard(deck.get(cardNumber++));
             }
@@ -240,6 +241,17 @@ public class Game extends Pane {
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
+        makeTopCardVisible();
+
+    }
+
+
+    public void makeTopCardVisible() {
+        for (int i = 0; i < tableauPiles.size(); i++) {
+            if (tableauPiles.get(i).getTopCard().isFaceDown()) {
+                tableauPiles.get(i).getTopCard().flip();
+            }
+        }
 
     }
 
