@@ -22,4 +22,11 @@ public enum Rank {
         int rankOfCard2 = card2.getRank().getValue();
         return (rankOfCard1 - rankOfCard2 == 1);
     }
+    public static boolean isPreviousRank(Card card1, Card card2) {
+        int rankOfCard1 = card1.getRank().getValue();
+        int rankOfCard2 = card2.getRank().getValue();
+        return (rankOfCard1 - rankOfCard2 == -1);
+    }
+
+
 }
