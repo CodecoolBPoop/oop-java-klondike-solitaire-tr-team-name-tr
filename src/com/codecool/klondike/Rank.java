@@ -12,4 +12,10 @@ public enum Rank {
     public String toString() {
         return name;
     }
+
+    public static boolean isNextRank(Card card1, Card card2) {
+        int rankOfCard1 = Integer.getInteger(card1.getRank().toString());
+        int rankOfCard2 = Integer.getInteger(card2.getRank().toString());
+        return (rankOfCard2 - rankOfCard1 == 1);
+    }
 }
