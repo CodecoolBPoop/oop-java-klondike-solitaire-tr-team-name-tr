@@ -1,5 +1,6 @@
 package com.codecool.klondike;
 
+import com.codecool.klondike.Pile.PileType;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -120,8 +121,11 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
         System.out.println("Stock refilled from discard pile.");
+        for(Card card : discardPile.getCards()) {
+            stockPile.addCard(card);
+        }
+
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
