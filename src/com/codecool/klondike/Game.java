@@ -129,6 +129,17 @@ public class Game extends Pane {
             }
         }
 
+        if (destPile.getPileType() == Pile.PileType.TABLEAU) {
+            if (destPile.isEmpty()) {
+                return card.getRank() == Rank.KING;
+            }
+
+            Card topCard = destPile.getTopCard();
+            if (Card.isOppositeColor(card, topCard)) {
+                return Rank.isPreviousRank(card, topCard);
+            }
+        }
+
 
         return false;
 
