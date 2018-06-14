@@ -324,6 +324,14 @@ public class Game extends Pane {
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
+
+        for (Pile i: tableauPiles) {
+            i.getCards().addListener((ListChangeListener<Card>) c -> {
+                if (!i.isEmpty() && i.getTopCard().isFaceDown()) {
+                    i.getTopCard().flip();
+            }
+        });
+        }
         makeTopCardVisible();
     }
 
