@@ -90,7 +90,7 @@ public class Card extends ImageView {
 
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
-                result.add(new Card(suit, rank, false));
+                result.add(new Card(suit, rank, true));
             }
         }
         return result;

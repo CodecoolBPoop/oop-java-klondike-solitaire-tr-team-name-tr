@@ -1,6 +1,7 @@
 package com.codecool.klondike;
 
 import com.codecool.klondike.Pile.PileType;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -8,6 +9,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -17,10 +20,8 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 import javafx.stage.Stage;
 
 public class Game extends Pane {
@@ -117,7 +118,7 @@ public class Game extends Pane {
         //TODO
         boolean isWon = true;
         for (int i=0; i<foundationPiles.size(); i++) {
-            if (foundationPiles.get(i).isEmpty() || foundationPiles.get(i).getTopCard().getRank().getValue() != 1) {
+            if (foundationPiles.get(i).isEmpty() || foundationPiles.get(i).getTopCard().getRank().getValue() != 13) {
                 isWon = false;
             }
         }
@@ -251,6 +252,22 @@ public class Game extends Pane {
             fp.getCards().addListener((ListChangeListener<Card>) c -> {
                 if (isGameWon()) {
                     System.out.println("YIPEE");
+
+                    Platform.runLater(() -> {
+                        ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+                        ButtonType cancel = new ButtonType("CLOSE", ButtonBar.ButtonData.CANCEL_CLOSE);
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Do you want to restart?", ok, cancel);
+                        alert.setTitle("WINNER!");
+                        alert.setHeaderText("You have WON this game!");
+
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ok){
+                            primaryStage.close();
+                            Klondike.initStage(primaryStage);
+                        } else {
+                            System.exit(0);
+                        }
+                    });
                 }
             });
         }
