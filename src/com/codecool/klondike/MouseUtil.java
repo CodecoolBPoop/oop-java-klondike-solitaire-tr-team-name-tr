@@ -32,6 +32,7 @@ public class MouseUtil {
     }
 
     public static void slideToDest(List<Card> cardsToSlide, Pile destPile) {
+
         if (cardsToSlide == null)
             return;
         double destCardGap = destPile.getCardGap();
