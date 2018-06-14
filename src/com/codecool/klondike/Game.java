@@ -74,16 +74,31 @@ public class Game extends Pane {
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
-        draggedCards.clear();
-        draggedCards.add(card);
+        draggedCards = FXCollections.observableArrayList();
+        if (!card.isFaceDown()) {
+            if (activePile.getPileType() != PileType.DISCARD) {
+                for (int i = activePile.getCards().indexOf(card); i < activePile.getCards().size(); i++) {
+                    draggedCards.add(activePile.getCards().get(i));
+                }
+            } else {
+                if (activePile.getPileType() == PileType.DISCARD) {
+                    //   System.out.println("Card " + card.getShortName() + " to be removed from discard.");
+                }
+                draggedCards.add(card);
+            }
+        }
 
-        card.getDropShadow().setRadius(20);
-        card.getDropShadow().setOffsetX(10);
-        card.getDropShadow().setOffsetY(10);
 
-        card.toFront();
-        card.setTranslateX(offsetX);
-        card.setTranslateY(offsetY);
+        for (int i = 0; i < draggedCards.size(); i++) {
+            draggedCards.get(i).getDropShadow().setRadius(20);
+            draggedCards.get(i).getDropShadow().setOffsetX(10);
+            draggedCards.get(i).getDropShadow().setOffsetY(10);
+
+            draggedCards.get(i).toFront();
+            draggedCards.get(i).setTranslateX(offsetX);
+            draggedCards.get(i).setTranslateY(offsetY);
+        }
+
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
@@ -104,8 +119,7 @@ public class Game extends Pane {
         //TODO
         if (pile != null) {
             handleValidMove(card, pile);
-        }
-        else {
+        } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards = null;
         }
@@ -147,8 +161,13 @@ public class Game extends Pane {
 
     public void refillStockFromDiscard() {
         System.out.println("Stock refilled from discard pile.");
-        for (Card card : discardPile.getCards()) {
-            stockPile.addCard(card);
+        if (stockPile.isEmpty()) {
+            for (Card card : discardPile.getCards()) {
+                stockPile.addCard(card);
+                card.flip();
+            }
+            stockPile.reversePile();
+            discardPile.clear();
         }
 
     }
@@ -178,17 +197,15 @@ public class Game extends Pane {
                 return Rank.isPreviousRank(card, topCard);
             }
         }
-
         return false;
-
     }
 
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
             if (!pile.equals(card.getContainingPile()) &&
-                isOverPile(card, pile) &&
-                isMoveValid(card, pile)) {
+                    isOverPile(card, pile) &&
+                    isMoveValid(card, pile)) {
                 result = pile;
             }
         }
@@ -198,8 +215,7 @@ public class Game extends Pane {
     private boolean isOverPile(Card card, Pile pile) {
         if (pile.isEmpty()) {
             return card.getBoundsInParent().intersects(pile.getBoundsInParent());
-        }
-        else {
+        } else {
             return card.getBoundsInParent().intersects(pile.getTopCard().getBoundsInParent());
         }
     }
@@ -214,15 +230,14 @@ public class Game extends Pane {
             if (destPile.getPileType().equals(Pile.PileType.TABLEAU)) {
                 msg = String.format("Placed %s to a new pile.", card);
             }
-        }
-        else {
+        } else {
             msg = String.format("Placed %s to %s.", card, destPile.getTopCard());
         }
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
-        draggedCards.clear();
-    }
+        draggedCards = FXCollections.observableArrayList();
 
+    }
 
     private void initPiles() {
         stockPile = new Pile(Pile.PileType.STOCK, "Stock", STOCK_GAP);
@@ -240,7 +255,7 @@ public class Game extends Pane {
 
         for (int i = 0; i < 4; i++) {
             Pile foundationPile = new Pile(Pile.PileType.FOUNDATION, "Foundation " + i,
-                FOUNDATION_GAP);
+                    FOUNDATION_GAP);
             foundationPile.setBlurredBackground();
             foundationPile.setLayoutX(610 + i * 180);
             foundationPile.setLayoutY(20);
@@ -310,22 +325,19 @@ public class Game extends Pane {
             getChildren().add(card);
         });
         makeTopCardVisible();
-
     }
 
     public void makeTopCardVisible() {
         for (int i = 0; i < tableauPiles.size(); i++) {
-            if (tableauPiles.get(i).getTopCard().isFaceDown()) {
+            if (!tableauPiles.get(i).isEmpty() && tableauPiles.get(i).getTopCard().isFaceDown()) {
                 tableauPiles.get(i).getTopCard().flip();
             }
         }
-
     }
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
-            BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
-
 }
