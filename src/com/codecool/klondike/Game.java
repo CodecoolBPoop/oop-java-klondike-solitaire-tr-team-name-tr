@@ -99,6 +99,7 @@ public class Game extends Pane {
             pile = getValidIntersectingPile(card, tableauPiles);
         }
 
+
         //TODO
         if (pile != null) {
             handleValidMove(card, pile);
@@ -107,11 +108,20 @@ public class Game extends Pane {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards = null;
         }
+        if (isGameWon()) {
+            System.out.println("WON");
+        }
     };
 
     public boolean isGameWon() {
         //TODO
-        return false;
+        boolean isWon = true;
+        for (int i=0; i<foundationPiles.size(); i++) {
+            if (foundationPiles.get(i).isEmpty() || foundationPiles.get(i).getTopCard().getRank().getValue() != 1) {
+                isWon = false;
+            }
+        }
+        return isWon;
     }
 
     public Game() {
@@ -195,6 +205,7 @@ public class Game extends Pane {
 
     private void handleValidMove(Card card, Pile destPile) {
         String msg = null;
+
         if (destPile.isEmpty()) {
             if (destPile.getPileType().equals(Pile.PileType.FOUNDATION)) {
                 msg = String.format("Placed %s to the foundation.", card);
