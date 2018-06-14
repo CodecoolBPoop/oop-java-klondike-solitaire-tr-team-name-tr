@@ -42,7 +42,6 @@ public class Pile extends Pane {
     }
 
     public int numOfCards() {
-        //TODO
         return this.getCards().size();
     }
 
@@ -52,6 +51,7 @@ public class Pile extends Pane {
 
     public void clear() {
         //TODO
+        this.cards = FXCollections.observableArrayList();
     }
 
     public void addCard(Card card) {

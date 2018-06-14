@@ -17,10 +17,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javafx.stage.Stage;
 
@@ -82,7 +79,7 @@ public class Game extends Pane {
                 }
             } else {
                 if (activePile.getPileType() == PileType.DISCARD) {
-                 //   System.out.println("Card " + card.getShortName() + " to be removed from discard.");
+                    //   System.out.println("Card " + card.getShortName() + " to be removed from discard.");
                 }
                 draggedCards.add(card);
             }
@@ -155,9 +152,9 @@ public class Game extends Pane {
             for (Card card : discardPile.getCards()) {
                 stockPile.addCard(card);
                 card.flip();
-              
             }
             stockPile.reversePile();
+            discardPile.clear();
         }
 
     }
@@ -187,9 +184,7 @@ public class Game extends Pane {
                 return Rank.isPreviousRank(card, topCard);
             }
         }
-
         return false;
-
     }
 
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
@@ -290,23 +285,19 @@ public class Game extends Pane {
             getChildren().add(card);
         });
         makeTopCardVisible();
-
     }
 
     public void makeTopCardVisible() {
         for (int i = 0; i < tableauPiles.size(); i++) {
-            if (!tableauPiles.get(i).isEmpty() && tableauPiles.get(i).getTopCard().isFaceDown() ) {
+            if (!tableauPiles.get(i).isEmpty() && tableauPiles.get(i).getTopCard().isFaceDown()) {
                 tableauPiles.get(i).getTopCard().flip();
             }
         }
-
     }
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-
     }
-
 }
