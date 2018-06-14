@@ -246,6 +246,16 @@ public class Game extends Pane {
             foundationPiles.add(foundationPile);
             getChildren().add(foundationPile);
         }
+
+        for(Pile fp : foundationPiles) {
+            fp.getCards().addListener((ListChangeListener<Card>) c -> {
+                if (isGameWon()) {
+                    System.out.println("YIPEE");
+                }
+            });
+        }
+
+
         for (int i = 0; i < 7; i++) {
             Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
             tableauPile.setBlurredBackground();
