@@ -87,6 +87,9 @@ public class Pile extends Pane {
 
     public  void reversePile() {
         Collections.reverse(cards);
+        for (Card card : cards) {
+            card.toFront();
+        }
     }
 
     public enum PileType {

@@ -74,7 +74,7 @@ public class Game extends Pane {
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
-        draggedCards.clear();
+        draggedCards = FXCollections.observableArrayList();
         if (!card.isFaceDown()) {
             if (activePile.getPileType() != PileType.DISCARD) {
                 for (int i = activePile.getCards().indexOf(card); i < activePile.getCards().size(); i++) {
@@ -155,8 +155,9 @@ public class Game extends Pane {
             for (Card card : discardPile.getCards()) {
                 stockPile.addCard(card);
                 card.flip();
+              
             }
-            //stockPile.reversePile();
+            stockPile.reversePile();
         }
 
     }
@@ -225,7 +226,7 @@ public class Game extends Pane {
         }
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
-        draggedCards.clear();
+        draggedCards = FXCollections.observableArrayList();
 
     }
 
